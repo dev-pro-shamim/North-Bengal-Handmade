@@ -9,6 +9,7 @@ export interface ProductItem {
   structure: string;
   image: string;
   thumb: string;
+  images?: string[];
   moq: string;
   leadTime: string;
   compliance: string;

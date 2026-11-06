@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { PRODUCTS } from '@/lib/products';
 import Navbar from '@/components/Navbar';
@@ -12,6 +12,36 @@ export default function HomePage() {
   const [profileTab, setProfileTab] = useState<'identity' | 'leadership' | 'operations' | 'esg'>('identity');
   const [catalogFilter, setCatalogFilter] = useState<string>('all');
   const [selectedCert, setSelectedCert] = useState<{ img: string; title: string; issuer: string } | null>(null);
+  const [siteContent, setSiteContent] = useState<any>(null);
+  const [liveProducts, setLiveProducts] = useState(PRODUCTS);
+  const [categories, setCategories] = useState<{ id: string; name: string; slug?: string }[]>([]);
+
+  useEffect(() => {
+    fetch('/api/content')
+      .then(res => res.json())
+      .then(data => {
+        if (data.content) setSiteContent(data.content);
+      })
+      .catch(() => {});
+
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data.products) && data.products.length > 0) {
+          setLiveProducts(data.products);
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data.categories) && data.categories.length > 0) {
+          setCategories(data.categories);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Estimator State
   const [estProduct, setEstProduct] = useState('baskets');
@@ -86,8 +116,8 @@ export default function HomePage() {
   };
 
   const filteredProducts = catalogFilter === 'all' 
-    ? PRODUCTS 
-    : PRODUCTS.filter(p => p.category.toLowerCase().includes(catalogFilter.toLowerCase()) || p.slug.includes(catalogFilter));
+    ? liveProducts 
+    : liveProducts.filter(p => (p.category && p.category.toLowerCase().includes(catalogFilter.toLowerCase())) || p.slug.includes(catalogFilter));
 
   return (
     <div className="font-sans antialiased text-stone-800 bg-linen-50 min-h-screen flex flex-col justify-between">
@@ -103,21 +133,25 @@ export default function HomePage() {
               <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-obsidian-850 border border-obsidian-700 shadow-inner">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
                 <span className="text-xs font-semibold text-stone-200">
-                  Direct Manufacturer & Exporter • <span className="text-amber-400">Northern Bengal, Bangladesh</span>
+                  {siteContent?.hero?.badge || 'Direct Manufacturer & Exporter'} • <span className="text-amber-400">Northern Bengal, Bangladesh</span>
                 </span>
               </div>
 
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.1]">
-                Weaving <span className="text-gradient-gold italic">Earth-Conscious</span> Luxury for Global Living.
+                {siteContent?.hero?.headline || (
+                  <>Weaving <span className="text-gradient-gold italic">Earth-Conscious</span> Luxury for Global Living.</>
+                )}
               </h1>
 
               <p className="text-base sm:text-lg text-stone-300 font-light leading-relaxed max-w-2xl">
-                We manufacture and export authentic <strong>Kaisa Grass Storage Baskets</strong>, <strong>Coiled Seagrass Hampers & Planters</strong>, <strong>Braided Golden Jute Bins</strong>, and <strong>Two-Tone Coiled Rope Organizers</strong>. Direct workshop pricing with custom specifications on each dedicated product page.
+                {siteContent?.hero?.subheading || (
+                  <>We manufacture and export authentic <strong>Kaisa Grass Storage Baskets</strong>, <strong>Coiled Seagrass Hampers & Planters</strong>, <strong>Braided Golden Jute Bins</strong>, and <strong>Two-Tone Coiled Rope Organizers</strong>. Direct workshop pricing with custom specifications on each dedicated product page.</>
+                )}
               </p>
 
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <a href="#collections" className="px-7 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-stone-950 font-bold text-xs uppercase tracking-wider shadow transition">
-                  Explore Products & Custom Quotes ↓
+                  {siteContent?.hero?.ctaCatalogText || 'Explore Products & Custom Quotes ↓'}
                 </a>
                 <Link href="/company-profile" className="px-6 py-4 rounded-xl bg-obsidian-800 hover:bg-obsidian-750 text-stone-200 border border-obsidian-600 font-semibold text-xs uppercase tracking-wider transition">
                   📄 Company Profile Dossier
@@ -129,20 +163,20 @@ export default function HomePage() {
 
               <div className="pt-8 border-t border-obsidian-800 grid grid-cols-2 sm:grid-cols-4 gap-6">
                 <div>
-                  <div className="text-3xl font-extrabold text-white">500<span className="text-amber-400">+</span></div>
-                  <div className="text-xs text-stone-400 mt-1">Rural Female Artisans</div>
+                  <div className="text-3xl font-extrabold text-white">{siteContent?.hero?.statArtisans || '500+'}</div>
+                  <div className="text-xs text-stone-400 mt-1">{siteContent?.hero?.statArtisansLabel || 'Rural Female Artisans'}</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-extrabold text-white">100<span className="text-emerald-400">%</span></div>
-                  <div className="text-xs text-stone-400 mt-1">Biodegradable Fibers</div>
+                  <div className="text-3xl font-extrabold text-white">{siteContent?.hero?.statEco || '100%'}</div>
+                  <div className="text-xs text-stone-400 mt-1">{siteContent?.hero?.statEcoLabel || 'Biodegradable Fibers'}</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-extrabold text-white">15K<span className="text-amber-400">+</span></div>
-                  <div className="text-xs text-stone-400 mt-1">Monthly Unit Capacity</div>
+                  <div className="text-3xl font-extrabold text-white">{siteContent?.hero?.statExperience || '15K+'}</div>
+                  <div className="text-xs text-stone-400 mt-1">{siteContent?.hero?.statExperienceLabel || 'Monthly Unit Capacity'}</div>
                 </div>
                 <div>
-                  <div className="text-3xl font-extrabold text-white">FOB<span className="text-amber-400">/CIF</span></div>
-                  <div className="text-xs text-stone-400 mt-1">Chittagong Port (BDCGP)</div>
+                  <div className="text-3xl font-extrabold text-white">{siteContent?.hero?.statCountries || 'FOB/CIF'}</div>
+                  <div className="text-xs text-stone-400 mt-1">{siteContent?.hero?.statCountriesLabel || 'Chittagong Port (BDCGP)'}</div>
                 </div>
               </div>
             </div>
@@ -204,21 +238,23 @@ export default function HomePage() {
               </div>
               <div className="w-full lg:w-2/5 space-y-4">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold uppercase tracking-wider">
-                  Official Export Banner
+                  {siteContent?.exportBanner?.badge || 'Official Export Banner'}
                 </div>
                 <h3 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug">
-                  "Ethically Handmade | Naturally Beautiful | Certified for Global Standards"
+                  {siteContent?.exportBanner?.headline || '"Ethically Handmade | Naturally Beautiful | Certified for Global Standards"'}
                 </h3>
                 <p className="text-stone-300 text-sm leading-relaxed">
-                  <strong>Exporting Handmade Excellence Since 2011</strong> — From artisan hands in Northern Bengal directly to your global retail shelves. Sustainable baskets, totes, planters, and shelf organizers manufactured under ethical fair-trade conditions.
+                  {siteContent?.exportBanner?.description || (
+                    <><strong>Exporting Handmade Excellence Since 2011</strong> — From artisan hands in Northern Bengal directly to your global retail shelves. Sustainable baskets, totes, planters, and shelf organizers manufactured under ethical fair-trade conditions.</>
+                  )}
                 </p>
                 <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
                   <div className="p-3 rounded-xl bg-obsidian-800/80 border border-obsidian-700">
-                    <div className="text-amber-400 font-bold">100% Eco-Friendly</div>
+                    <div className="text-amber-400 font-bold">{siteContent?.exportBanner?.tag1 || '100% Eco-Friendly'}</div>
                     <div className="text-stone-400 text-[11px] mt-0.5">Kaisa, Seagrass & Golden Jute</div>
                   </div>
                   <div className="p-3 rounded-xl bg-obsidian-800/80 border border-obsidian-700">
-                    <div className="text-emerald-400 font-bold">Wholesale Direct</div>
+                    <div className="text-emerald-400 font-bold">{siteContent?.exportBanner?.tag2 || 'Wholesale Direct'}</div>
                     <div className="text-stone-400 text-[11px] mt-0.5">FOB Chittagong Sea Freight</div>
                   </div>
                 </div>
@@ -269,16 +305,20 @@ export default function HomePage() {
             </div>
             <div className="lg:col-span-7 space-y-5">
               <span className="px-3 py-1 rounded-md bg-amber-100 text-amber-900 text-xs font-bold uppercase tracking-widest">
-                Artisanal Roots
+                {siteContent?.heritage?.badge || 'Artisanal Roots'}
               </span>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-stone-900 leading-tight">
-                Northern Bengal's Legendary Weaving Craftsmanship
+                {siteContent?.heritage?.title || "Northern Bengal's Legendary Weaving Craftsmanship"}
               </h2>
               <p className="text-stone-600 text-sm leading-relaxed">
-                Founded in Northern Bangladesh, <strong>North Bengal Handmade Products BD</strong> represents the perfect union between ancient weaving ingenuity and modern global supply-chain excellence.
+                {siteContent?.heritage?.p1 || (
+                  <>Founded in Northern Bangladesh, <strong>North Bengal Handmade Products BD</strong> represents the perfect union between ancient weaving ingenuity and modern global supply-chain excellence.</>
+                )}
               </p>
               <p className="text-stone-600 text-sm leading-relaxed">
-                Northern Bengal—particularly <strong>Kaunia, Rangpur</strong>—has been revered for generations as the center of artisanal fiber weaving, where master women weavers hand-manipulate raw golden jute, kaisa grass, and soft cotton into heirloom home baskets and storage organizers. By structuring these decentralized cottage artisans into an export-ready production ecosystem managed from our corporate liaison headquarters in <strong>Sector-06, Uttara, Dhaka</strong>, we deliver pristine handcrafted goods directly to global retailers.
+                {siteContent?.heritage?.p2 || (
+                  <>Northern Bengal—particularly <strong>Kaunia, Rangpur</strong>—has been revered for generations as the center of artisanal fiber weaving, where master women weavers hand-manipulate raw golden jute, kaisa grass, and soft cotton into heirloom home baskets and storage organizers. By structuring these decentralized cottage artisans into an export-ready production ecosystem managed from our corporate liaison headquarters in <strong>Sector-06, Uttara, Dhaka</strong>, we deliver pristine handcrafted goods directly to global retailers.</>
+                )}
               </p>
             </div>
           </div>
@@ -407,22 +447,22 @@ export default function HomePage() {
               <div className="p-6 rounded-3xl bg-obsidian-850 border border-obsidian-700">
                 <div className="text-2xl font-black text-amber-400 mb-1">SDG 1</div>
                 <div className="font-bold text-white text-sm">No Poverty</div>
-                <p className="text-xs text-stone-400 mt-2">Steady fair wages directly paid to rural Northern Bengal craft households.</p>
+                <p className="text-xs text-stone-400 mt-2">{siteContent?.esg?.sdg1 || 'Steady fair wages directly paid to rural Northern Bengal craft households.'}</p>
               </div>
               <div className="p-6 rounded-3xl bg-obsidian-850 border border-obsidian-700">
                 <div className="text-2xl font-black text-emerald-400 mb-1">SDG 5</div>
                 <div className="font-bold text-white text-sm">Gender Equality</div>
-                <p className="text-xs text-stone-400 mt-2">Empowering 85%+ rural female artisans with leadership and financial independence.</p>
+                <p className="text-xs text-stone-400 mt-2">{siteContent?.esg?.sdg5 || 'Empowering 85%+ rural female artisans with leadership and financial independence.'}</p>
               </div>
               <div className="p-6 rounded-3xl bg-obsidian-850 border border-obsidian-700">
                 <div className="text-2xl font-black text-blue-400 mb-1">SDG 12</div>
                 <div className="font-bold text-white text-sm">Responsible Consumption</div>
-                <p className="text-xs text-stone-400 mt-2">100% biodegradable natural fibers replacing petroleum synthetics.</p>
+                <p className="text-xs text-stone-400 mt-2">{siteContent?.esg?.sdg12 || '100% biodegradable natural fibers replacing petroleum synthetics.'}</p>
               </div>
               <div className="p-6 rounded-3xl bg-obsidian-850 border border-obsidian-700">
                 <div className="text-2xl font-black text-purple-400 mb-1">SDG 13</div>
                 <div className="font-bold text-white text-sm">Climate Action</div>
-                <p className="text-xs text-stone-400 mt-2">Carbon-negative golden jute handloomed without industrial emissions.</p>
+                <p className="text-xs text-stone-400 mt-2">{siteContent?.esg?.sdg13 || 'Carbon-negative golden jute handloomed without industrial emissions.'}</p>
               </div>
             </div>
           )}
@@ -448,12 +488,17 @@ export default function HomePage() {
             {/* Category Filter Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
               {[
-                { id: 'all', label: 'All Collections (6)' },
-                { id: 'kaisa', label: 'Kaisa Grass Baskets & Trays' },
-                { id: 'seagrass', label: 'Seagrass Hampers & Bowls' },
-                { id: 'jute', label: 'Golden Jute Planters' },
-                { id: 'rope', label: 'Cotton Rope Baskets' },
-                { id: 'tote', label: 'Market Totes' }
+                { id: 'all', label: `All Collections (${liveProducts.length})` },
+                ...(categories.length > 0
+                  ? categories.map(c => ({ id: c.slug || c.id, label: c.name }))
+                  : [
+                      { id: 'kaisa', label: 'Kaisa Grass Baskets & Trays' },
+                      { id: 'seagrass', label: 'Seagrass Hampers & Bowls' },
+                      { id: 'jute', label: 'Golden Jute Planters' },
+                      { id: 'rope', label: 'Cotton Rope Baskets' },
+                      { id: 'tote', label: 'Market Totes' }
+                    ]
+                )
               ].map(cat => (
                 <button
                   key={cat.id}
@@ -482,7 +527,7 @@ export default function HomePage() {
                     <h3 className="font-bold text-lg text-stone-900 group-hover:text-amber-700 transition">{p.title}</h3>
                     <p className="text-xs text-stone-600 mt-2 line-clamp-2">{p.description}</p>
                     <div className="mt-4 pt-3 border-t border-stone-100 text-[11px] text-stone-500 font-mono">
-                      <span>MOQ: <strong className="text-stone-900">{p.specs.moq.split(' ')[0]} pcs</strong></span> • <span>Lead Time: <strong className="text-stone-900">{p.specs.productionLeadTime.split('for')[0]}</strong></span>
+                      <span>MOQ: <strong className="text-stone-900">{p.specs?.moq ? p.specs.moq.split(' ')[0] : '500'} pcs</strong></span> • <span>Lead Time: <strong className="text-stone-900">{p.specs?.productionLeadTime ? p.specs.productionLeadTime.split('for')[0] : '25-35 Days'}</strong></span>
                     </div>
                   </div>
                 </div>

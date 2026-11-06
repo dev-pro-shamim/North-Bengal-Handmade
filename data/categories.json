@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cat-storage",
+    "name": "Storage Baskets",
+    "slug": "storage-baskets",
+    "description": "Handcoiled Kaunia wild seagrass and golden jute utility baskets for living rooms, shelves, and closets.",
+    "icon": "🧺",
+    "itemCount": 18
+  },
+  {
+    "id": "cat-planters",
+    "name": "Planters & Pots",
+    "slug": "planters-and-pots",
+    "description": "Natural fiber decorative indoor planter sleeves, hanging pots, and macrame hanging planters.",
+    "icon": "🪴",
+    "itemCount": 10
+  },
+  {
+    "id": "cat-laundry",
+    "name": "Laundry & Hampers",
+    "slug": "laundry-and-hampers",
+    "description": "Heavy-duty cotton rope hampers, tall standing laundry cylinders with lids, and corner hampers.",
+    "icon": "🧺",
+    "itemCount": 8
+  },
+  {
+    "id": "cat-trays",
+    "name": "Home Accents & Trays",
+    "slug": "home-accents-and-trays",
+    "description": "Shallow desktop trays, tabletop bread baskets, fruit bowls, coasters, and decorative placemats.",
+    "icon": "🍽️",
+    "itemCount": 12
+  },
+  {
+    "id": "cat-rugs",
+    "name": "Natural Fiber Rugs",
+    "slug": "natural-fiber-rugs",
+    "description": "Handloomed horizontal pit-loom golden jute area rugs, floor mats, and geometric runners.",
+    "icon": "🧶",
+    "itemCount": 4
+  }
+]

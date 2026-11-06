@@ -1,0 +1,44 @@
+{
+  "hero": {
+    "badge": "100% Export-Grade Natural Fiber Products",
+    "headline": "Crafting Sustainable Elegance from Northern Bengal",
+    "subheading": "Direct factory manufacturer and exporter of handcrafted storage baskets, planters, and home living collections. Ethically created by master rural women artisans since 2011.",
+    "ctaCatalogText": "Explore 52 Products Gallery",
+    "ctaQuoteText": "Request Custom Export Quote",
+    "statArtisans": "500+",
+    "statArtisansLabel": "Master Women Artisans",
+    "statExperience": "13+ Years",
+    "statExperienceLabel": "Global Exporting History",
+    "statCountries": "18+ Markets",
+    "statCountriesLabel": "USA, EU, UK & Japan",
+    "statEco": "100%",
+    "statEcoLabel": "Biodegradable Fibers"
+  },
+  "exportBanner": {
+    "badge": "Official Export Banner",
+    "headline": "\"Ethically Handmade | Naturally Beautiful | Certified for Global Standards\"",
+    "description": "Exporting handmade excellence from Northern Bangladesh since 2011. Direct manufacturers of wild Kaisa grass storage baskets, coiled seagrass hampers, braided golden jute planters, and sustainable lifestyle carry goods.",
+    "tag1": "100% Eco-Friendly (Kaisa, Seagrass & Jute)",
+    "tag2": "Wholesale Direct (FOB Chittagong Sea Freight)"
+  },
+  "heritage": {
+    "badge": "Artisanal Heritage & ESG Commitment",
+    "title": "Preserving Ancestral Looming in Kaunia, Rangpur",
+    "p1": "Rooted along the fertile riverbanks of Northern Bangladesh, our craft preserves centuries of horizontal pit-loom weaving, wild grass foraging, and natural rope braiding.",
+    "p2": "Over 85% of our workforce consists of skilled rural female artisans who gain independent livelihood, healthcare, and fair wages under strict ethical fair-trade conditions."
+  },
+  "esg": {
+    "sdg1": "Steady living wages directly paid to rural craft households across Northern Bengal.",
+    "sdg5": "Empowering 85%+ rural female artisans with leadership and financial independence.",
+    "sdg12": "100% biodegradable natural fibers replacing non-recyclable petroleum plastics.",
+    "sdg13": "Carbon-negative golden jute handloomed without industrial greenhouse emissions."
+  },
+  "logistics": {
+    "port": "Chittagong Seaport (BDCGP)",
+    "airport": "Hazrat Shahjalal International Airport, Dhaka (DAC)",
+    "containerSizes": "20ft FCL (28-30 CBM) | 40ft HC (65-68 CBM)",
+    "inspectionStandard": "Phytosanitary Certification, Fumigation Treatment & Certificate of Origin",
+    "leadTime": "25-35 Days from Irrevocable L/C confirmation",
+    "paymentTerms": "Irrevocable L/C at Sight or 30% Advance TT, balance upon Bill of Lading"
+  }
+}

@@ -31,14 +31,19 @@ export async function POST(request: Request) {
       );
     }
 
+    const imagesList = Array.isArray(body.images) && body.images.length > 0 
+      ? body.images 
+      : (image ? [image] : ['/assets/products-gallery/nb-prod-01.jpg']);
+
     const newProduct = createProduct({
       itemNo: body.itemNo || `NB-EXP-${Math.floor(100 + Math.random() * 900)}`,
       title,
       category,
       material,
       structure: structure || 'Handcrafted Design',
-      image: image || '/assets/products/kaisa-grass-deep-baskets.jpg',
-      thumb: image || '/assets/products/kaisa-grass-deep-baskets.jpg',
+      image: imagesList[0],
+      thumb: body.thumb || imagesList[0],
+      images: imagesList,
       moq: moq || '300 - 500 pcs',
       leadTime: leadTime || '25-35 Days FOB Chittagong',
       compliance: compliance || 'Phytosanitary & Fumigation Certified',

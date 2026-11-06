@@ -7,10 +7,23 @@ import { ALL_PRODUCTS, ProductItem } from '@/lib/allProductsData';
 export default function ProductShowcaseSlider() {
   const [isPaused, setIsPaused] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<ProductItem | null>(null);
+  const [productsList, setProductsList] = useState<ProductItem[]>(ALL_PRODUCTS);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Take the first 24 products for the dynamic showcase slider
-  const sliderItems = ALL_PRODUCTS.slice(0, 24);
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data.products && data.products.length > 0) {
+          setProductsList(data.products);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Filter featured or first 24 products for the dynamic showcase slider
+  const featured = productsList.filter(p => p.featured);
+  const sliderItems = featured.length >= 8 ? featured : productsList.slice(0, 24);
 
   // Manual scroll handler
   const scroll = (direction: 'left' | 'right') => {

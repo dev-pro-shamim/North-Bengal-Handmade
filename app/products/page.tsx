@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -9,27 +9,54 @@ import { PRODUCTS } from '@/lib/products';
 export default function ProductsCatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [liveProducts, setLiveProducts] = useState(PRODUCTS);
+  const [dbCategories, setDbCategories] = useState<{ id: string; name: string; slug?: string }[]>([]);
+
+  useEffect(() => {
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data.products) && data.products.length > 0) {
+          setLiveProducts(data.products);
+        }
+      })
+      .catch(() => {});
+
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data.categories) && data.categories.length > 0) {
+          setDbCategories(data.categories);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const categories = [
-    { id: 'all', label: 'All Products (6)' },
-    { id: 'kaisa', label: 'Kaisa Grass Baskets & Trays' },
-    { id: 'seagrass', label: 'Seagrass Hampers & Bowls' },
-    { id: 'jute', label: 'Golden Jute Planters' },
-    { id: 'rope', label: 'Cotton Rope Baskets' },
-    { id: 'tote', label: 'Seagrass Market Totes' }
+    { id: 'all', label: `All Products (${liveProducts.length})` },
+    ...(dbCategories.length > 0
+      ? dbCategories.map(c => ({ id: c.slug || c.id, label: c.name }))
+      : [
+          { id: 'kaisa', label: 'Kaisa Grass Baskets & Trays' },
+          { id: 'seagrass', label: 'Seagrass Hampers & Bowls' },
+          { id: 'jute', label: 'Golden Jute Planters' },
+          { id: 'rope', label: 'Cotton Rope Baskets' },
+          { id: 'tote', label: 'Seagrass Market Totes' }
+        ]
+    )
   ];
 
-  const filteredProducts = PRODUCTS.filter(p => {
+  const filteredProducts = liveProducts.filter(p => {
     const matchesCategory = 
       selectedCategory === 'all' || 
       p.slug.includes(selectedCategory) || 
-      p.category.toLowerCase().includes(selectedCategory.toLowerCase());
+      (p.category && p.category.toLowerCase().includes(selectedCategory.toLowerCase()));
     
     const matchesSearch = 
       searchQuery === '' ||
-      p.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.specs.material.toLowerCase().includes(searchQuery.toLowerCase());
+      (p.title && p.title.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (p.description && p.description.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (p.specs?.material && p.specs.material.toLowerCase().includes(searchQuery.toLowerCase()));
 
     return matchesCategory && matchesSearch;
   });
@@ -168,14 +195,14 @@ export default function ProductsCatalogPage() {
                         <div className="mt-4 pt-3 border-t border-stone-100 grid grid-cols-2 gap-2 text-[11px] text-stone-500">
                           <div>
                             <span>MOQ: </span>
-                            <strong className="text-stone-900">{p.specs.moq.split(' ')[0]} units</strong>
+                            <strong className="text-stone-900">{p.specs?.moq ? p.specs.moq.split(' ')[0] : '500'} units</strong>
                           </div>
                           <div>
                             <span>Lead Time: </span>
-                            <strong className="text-stone-900">{p.specs.productionLeadTime.split('for')[0]}</strong>
+                            <strong className="text-stone-900">{p.specs?.productionLeadTime ? p.specs.productionLeadTime.split('for')[0] : '25-35 Days'}</strong>
                           </div>
                           <div className="col-span-2 text-[10px] text-stone-400 font-mono">
-                            Material: {p.specs.material.split('with')[0]}
+                            Material: {p.specs?.material ? p.specs.material.split('with')[0] : 'Natural Plant Fiber'}
                           </div>
                         </div>
                       </div>

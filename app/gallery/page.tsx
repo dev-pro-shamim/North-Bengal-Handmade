@@ -1,28 +1,54 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ALL_PRODUCTS, ProductItem } from '@/lib/allProductsData';
 
 export default function GalleryPage() {
+  const [productsList, setProductsList] = useState<ProductItem[]>(ALL_PRODUCTS);
+  const [categoriesList, setCategoriesList] = useState<string[]>(['All']);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeModalProduct, setActiveModalProduct] = useState<ProductItem | null>(null);
+  const [modalActiveImage, setModalActiveImage] = useState<string>('');
+
+  useEffect(() => {
+    // Fetch live products
+    fetch('/api/products')
+      .then(res => res.json())
+      .then(data => {
+        if (data.products && data.products.length > 0) {
+          setProductsList(data.products);
+        }
+      })
+      .catch(() => {});
+
+    // Fetch dynamic categories
+    fetch('/api/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (data.categories && data.categories.length > 0) {
+          setCategoriesList(['All', ...data.categories.map((c: any) => c.name)]);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const categories = useMemo(() => {
+    if (categoriesList.length > 1) return categoriesList;
     const cats = ['All'];
-    ALL_PRODUCTS.forEach(p => {
+    productsList.forEach(p => {
       if (!cats.includes(p.category)) {
         cats.push(p.category);
       }
     });
     return cats;
-  }, []);
+  }, [categoriesList, productsList]);
 
   const filteredProducts = useMemo(() => {
-    return ALL_PRODUCTS.filter(product => {
+    return productsList.filter(product => {
       const matchCategory = selectedCategory === 'All' || product.category === selectedCategory;
       const q = searchQuery.toLowerCase().trim();
       const matchSearch = !q || 
@@ -32,7 +58,7 @@ export default function GalleryPage() {
         product.itemNo.toLowerCase().includes(q);
       return matchCategory && matchSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [selectedCategory, searchQuery, productsList]);
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 font-sans flex flex-col justify-between">
@@ -142,7 +168,10 @@ export default function GalleryPage() {
                     <div>
                       {/* Image Frame with Clean Background & Zoom Trigger */}
                       <div 
-                        onClick={() => setActiveModalProduct(product)}
+                        onClick={() => {
+                          setActiveModalProduct(product);
+                          setModalActiveImage(product.images?.[0] || product.image);
+                        }}
                         className="relative aspect-square w-full bg-stone-100 overflow-hidden cursor-pointer flex items-center justify-center p-3 border-b border-stone-100 group/img"
                       >
                         <img
@@ -271,14 +300,33 @@ export default function GalleryPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2">
               
-              {/* High-Resolution Zoom Display */}
-              <div className="bg-stone-100 p-6 flex items-center justify-center border-b md:border-b-0 md:border-r border-stone-200 relative">
+              {/* High-Resolution Zoom Display with Multi-Image Thumbnails */}
+              <div className="bg-stone-100 p-6 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-stone-200 relative">
                 <img
-                  src={activeModalProduct.image}
+                  src={modalActiveImage || activeModalProduct.image}
                   alt={activeModalProduct.title}
-                  className="max-h-[460px] w-auto object-contain rounded-xl drop-shadow-xl"
+                  className="max-h-[380px] w-auto object-contain rounded-xl drop-shadow-xl"
                 />
-                <div className="absolute bottom-4 left-4 px-3 py-1 rounded-lg bg-stone-900/80 text-white text-[10px] font-bold">
+
+                {/* Multiple Images Thumbnails row */}
+                {activeModalProduct.images && activeModalProduct.images.length > 1 && (
+                  <div className="flex gap-2 mt-4 overflow-x-auto w-full justify-center p-1">
+                    {activeModalProduct.images.map((imgUrl, i) => (
+                      <button
+                        key={i}
+                        type="button"
+                        onClick={() => setModalActiveImage(imgUrl)}
+                        className={`w-14 h-14 rounded-lg overflow-hidden border-2 shrink-0 transition ${
+                          (modalActiveImage || activeModalProduct.image) === imgUrl ? 'border-amber-500 scale-105 shadow' : 'border-stone-300 opacity-70 hover:opacity-100'
+                        }`}
+                      >
+                        <img src={imgUrl} alt={`Thumb ${i}`} className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className="absolute top-4 left-4 px-3 py-1 rounded-lg bg-stone-900/80 text-white text-[10px] font-bold">
                   {activeModalProduct.itemNo}
                 </div>
               </div>
