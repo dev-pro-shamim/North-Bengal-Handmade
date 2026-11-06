@@ -116,8 +116,8 @@ export default function HomePage() {
   };
 
   const filteredProducts = catalogFilter === 'all' 
-    ? liveProducts 
-    : liveProducts.filter(p => (p.category && p.category.toLowerCase().includes(catalogFilter.toLowerCase())) || p.slug.includes(catalogFilter));
+    ? PRODUCTS 
+    : PRODUCTS.filter(p => (p.category && p.category.toLowerCase().includes(catalogFilter.toLowerCase())) || p.slug.includes(catalogFilter));
 
   return (
     <div className="font-sans antialiased text-stone-800 bg-linen-50 min-h-screen flex flex-col justify-between">
@@ -488,17 +488,11 @@ export default function HomePage() {
             {/* Category Filter Buttons */}
             <div className="flex flex-wrap items-center justify-center gap-2 mt-8">
               {[
-                { id: 'all', label: `All Collections (${liveProducts.length})` },
-                ...(categories.length > 0
-                  ? categories.map(c => ({ id: c.slug || c.id, label: c.name }))
-                  : [
-                      { id: 'kaisa', label: 'Kaisa Grass Baskets & Trays' },
-                      { id: 'seagrass', label: 'Seagrass Hampers & Bowls' },
-                      { id: 'jute', label: 'Golden Jute Planters' },
-                      { id: 'rope', label: 'Cotton Rope Baskets' },
-                      { id: 'tote', label: 'Market Totes' }
-                    ]
-                )
+                { id: 'all', label: `Flagship Collections (${PRODUCTS.length})` },
+                { id: 'kaisa', label: 'Kaisa Grass Baskets & Trays' },
+                { id: 'seagrass', label: 'Seagrass Hampers & Bowls' },
+                { id: 'jute', label: 'Golden Jute Planters' },
+                { id: 'rope', label: 'Cotton Rope Baskets' }
               ].map(cat => (
                 <button
                   key={cat.id}
@@ -518,7 +512,7 @@ export default function HomePage() {
                 <div>
                   <div className="relative h-64 overflow-hidden bg-stone-100 flex items-center justify-center">
                     <img 
-                      src={p.heroImage || p.image || (p.images && p.images[0]) || p.thumb || '/assets/products/kaisa-grass-deep-baskets.jpg'} 
+                      src={(p as any).heroImage || (p as any).image || '/assets/products/kaisa-grass-deep-baskets.jpg'} 
                       alt={p.title} 
                       onError={(e) => {
                         const target = e.currentTarget;
@@ -537,7 +531,7 @@ export default function HomePage() {
                     <h3 className="font-bold text-lg text-stone-900 group-hover:text-amber-700 transition">{p.title}</h3>
                     <p className="text-xs text-stone-600 mt-2 line-clamp-2">{p.description || `${p.title} handcrafted in Northern Bengal using premium natural fibers.`}</p>
                     <div className="mt-4 pt-3 border-t border-stone-100 text-[11px] text-stone-500 font-mono">
-                      <span>MOQ: <strong className="text-stone-900">{p.specs?.moq ? p.specs.moq.split(' ')[0] : (p.moq ? p.moq.split(' ')[0] : '500')} pcs</strong></span> • <span>Lead Time: <strong className="text-stone-900">{p.specs?.productionLeadTime ? p.specs.productionLeadTime.split('for')[0] : (p.leadTime ? p.leadTime.split('for')[0] : '25-35 Days')}</strong></span>
+                      <span>MOQ: <strong className="text-stone-900">{p.specs?.moq ? p.specs.moq.split(' ')[0] : '500'} pcs</strong></span> • <span>Lead Time: <strong className="text-stone-900">{p.specs?.productionLeadTime ? p.specs.productionLeadTime.split('for')[0] : '25-35 Days'}</strong></span>
                     </div>
                   </div>
                 </div>
@@ -561,6 +555,35 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Link to Full 52 Products Gallery */}
+          <div className="mt-14 p-8 rounded-3xl bg-obsidian-900 border border-obsidian-750 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+            <div className="space-y-1 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20 text-[11px] font-bold uppercase tracking-wider">
+                ✨ Comprehensive Export Visual Archive
+              </div>
+              <h3 className="text-xl sm:text-2xl font-extrabold text-white">
+                Explore All 52 Handcrafted Products in Studio Gallery
+              </h3>
+              <p className="text-stone-400 text-xs sm:text-sm max-w-xl">
+                Browse our complete collection of authentic seagrass cylinders, kaisa trays, and jute organizers with multi-angle zoom, specs inspection, and instant quotation.
+              </p>
+            </div>
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <Link 
+                href="/gallery" 
+                className="px-6 py-3.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-stone-950 text-xs font-bold uppercase tracking-wider transition shadow"
+              >
+                Open 52 Products Gallery →
+              </Link>
+              <Link 
+                href="/products" 
+                className="px-5 py-3.5 rounded-xl bg-obsidian-800 hover:bg-obsidian-750 text-stone-200 border border-obsidian-700 text-xs font-bold uppercase tracking-wider transition"
+              >
+                Full Catalog Specs
+              </Link>
+            </div>
           </div>
 
         </div>

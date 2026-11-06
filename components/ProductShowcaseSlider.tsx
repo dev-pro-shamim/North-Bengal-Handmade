@@ -21,9 +21,26 @@ export default function ProductShowcaseSlider() {
       .catch(() => {});
   }, []);
 
-  // Filter featured or first 24 products for the dynamic showcase slider
-  const featured = productsList.filter(p => p.featured);
-  const sliderItems = featured.length >= 8 ? featured : productsList.slice(0, 24);
+  // All 52 products stream in the dynamic showcase slider
+  const sliderItems = productsList;
+
+  // Auto-scroll animation effect
+  useEffect(() => {
+    if (isPaused) return;
+
+    const interval = setInterval(() => {
+      if (scrollRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          scrollRef.current.scrollBy({ left: 340, behavior: 'smooth' });
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isPaused]);
 
   // Manual scroll handler
   const scroll = (direction: 'left' | 'right') => {
