@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 15, 23, 42;
+  --background-start-rgb: 253, 251, 247;
+  --background-end-rgb: 247, 244, 238;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: #fdfbf7;
+  font-family: var(--font-poppins), sans-serif;
+}
+
+.hero-mesh {
+  background-color: #0c1411;
+  background-image: 
+    radial-gradient(at 10% 20%, rgba(184, 141, 81, 0.25) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(5, 150, 105, 0.2) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(184, 141, 81, 0.15) 0px, transparent 60%);
+}
+
+.glass-dark {
+  background: rgba(12, 20, 17, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fcedc5 0%, #d4a762 50%, #b88d51 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
