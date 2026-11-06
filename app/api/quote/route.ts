@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { addInquiry } from '@/lib/store';
 
 export async function POST(request: Request) {
   try {
@@ -29,10 +30,26 @@ export async function POST(request: Request) {
     const quoteRef = `CQ-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     console.log(`[CUSTOM PRODUCT QUOTE DISPATCHED] Ref: ${quoteRef}`);
-    console.log(`Item: ${productTitle} (${productSlug})`);
-    console.log(`Spec: Size: ${selectedSize} | Color: ${selectedColor} | Brand: ${selectedBranding}`);
-    console.log(`Buyer: ${buyerCompany} (${buyerName} - ${buyerEmail} / ${buyerPhone})`);
-    console.log(`Term: ${incoterm} | Port: ${destination} | Qty: ${quantity}`);
+
+    // Persist to store for Admin Dashboard
+    addInquiry({
+      reference: quoteRef,
+      type: 'custom_quote',
+      status: 'new',
+      customer: {
+        name: buyerName,
+        company: buyerCompany,
+        email: buyerEmail,
+        phone: buyerPhone || '',
+      },
+      details: {
+        product: `${productTitle} (${selectedSize || 'Standard'} / ${selectedColor || 'Natural'})`,
+        quantity: String(quantity),
+        incoterm: incoterm || 'FOB Chittagong (BDCGP)',
+        destination: destination || '',
+        notes: `Branding: ${selectedBranding || 'None'} | Notes: ${specialNotes || 'None'}`
+      }
+    });
 
     return NextResponse.json({
       success: true,

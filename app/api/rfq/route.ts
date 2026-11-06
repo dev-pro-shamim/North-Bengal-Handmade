@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { addInquiry } from '@/lib/store';
 
 export async function POST(request: Request) {
   try {
@@ -15,6 +16,26 @@ export async function POST(request: Request) {
     const rfqReference = `RFQ-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     console.log(`[RFQ SUBMITTED] Ref: ${rfqReference} from ${company} (${name} - ${email})`);
+
+    // Persist to store for Admin Dashboard
+    addInquiry({
+      reference: rfqReference,
+      type: 'rfq',
+      status: 'new',
+      customer: {
+        name,
+        company,
+        email,
+        phone: phone || '',
+      },
+      details: {
+        product: category,
+        quantity: quantity || 'Standard Container Batch',
+        incoterm: incoterm || 'FOB Chittagong (BDCGP)',
+        destination: destination || '',
+        notes: notes || ''
+      }
+    });
 
     return NextResponse.json({
       success: true,

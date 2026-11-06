@@ -1,0 +1,82 @@
+[
+  {
+    "id": "inq-01",
+    "reference": "RFQ-2026-9281",
+    "createdAt": "2026-11-06T08:30:00.000Z",
+    "type": "rfq",
+    "status": "new",
+    "customer": {
+      "name": "Sarah Jenkins",
+      "company": "Nordic Living Essentials Ltd",
+      "email": "sarah.jenkins@nordicliving.se",
+      "phone": "+46 8 123 4567",
+      "country": "Sweden"
+    },
+    "details": {
+      "product": "Kaunia Rectangular Seagrass Storage Baskets (Set of 3) [NB-EXP-101]",
+      "quantity": "1,200 sets",
+      "incoterm": "FOB Chittagong Seaport (BDCGP)",
+      "destination": "Gothenburg Port, Sweden",
+      "notes": "We require unbleached cotton inner lining and custom kraft hangtags with our brand logo. Please provide container packing breakdown."
+    },
+    "communications": []
+  },
+  {
+    "id": "inq-02",
+    "reference": "CQ-2026-4402",
+    "createdAt": "2026-11-05T14:15:00.000Z",
+    "type": "custom_quote",
+    "status": "quoted",
+    "customer": {
+      "name": "David Miller",
+      "company": "Pacific Home Imports LLC",
+      "email": "dmiller@pacifichome.com",
+      "phone": "+1 415 555 0192",
+      "country": "United States"
+    },
+    "details": {
+      "product": "Braided Cotton Rope & Jute Two-Tone Utility Hamper [NB-EXP-104]",
+      "quantity": "2,500 pcs (1x 40ft HC Container)",
+      "incoterm": "FOB Chittagong (BDCGP)",
+      "destination": "Long Beach, CA, USA",
+      "notes": "Need FSC-certified shipping cartons and individual poly-bag packaging with desiccant silica gel packets."
+    },
+    "communications": [
+      {
+        "sentAt": "2026-11-05T16:00:00.000Z",
+        "sender": "export@northbengalhandmade.com",
+        "subject": "Commercial Quotation for NB-EXP-104 (Pacific Home Imports)",
+        "body": "Dear David, Thank you for your inquiry. Our FOB Chittagong offer for 2,500 pcs is $4.85/pc, packed in 5-ply export cartons. Counter-samples ready in 5 business days."
+      }
+    ]
+  },
+  {
+    "id": "inq-03",
+    "reference": "TKT-821904",
+    "createdAt": "2026-11-04T10:00:00.000Z",
+    "type": "contact",
+    "status": "closed",
+    "customer": {
+      "name": "Kenji Takahashi",
+      "company": "Tokyo Craft Trading Co.",
+      "email": "takahashi@tokyocraft.co.jp",
+      "phone": "+81 3 5555 0143",
+      "country": "Japan"
+    },
+    "details": {
+      "product": "General Inquiry - Factory Inspection Visit",
+      "quantity": "Trial shipment 500 pcs",
+      "incoterm": "FOB Chittagong",
+      "destination": "Yokohama Port, Japan",
+      "notes": "Planning a visit to your Kaunia, Rangpur workshop center next month. Please share the coordination procedure."
+    },
+    "communications": [
+      {
+        "sentAt": "2026-11-04T12:30:00.000Z",
+        "sender": "export@northbengalhandmade.com",
+        "subject": "Re: Factory Inspection Visit in Kaunia, Rangpur",
+        "body": "Dear Takahashi-san, We welcome you to Northern Bengal! Our Dhaka team will arrange transport from Saidpur Airport directly to our artisan workshop."
+      }
+    ]
+  }
+]

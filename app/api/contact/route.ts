@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { addInquiry } from '@/lib/store';
 
 export async function POST(request: Request) {
   try {
@@ -13,6 +14,23 @@ export async function POST(request: Request) {
     }
 
     const ticketId = `TKT-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    // Persist to store for Admin Dashboard
+    addInquiry({
+      reference: ticketId,
+      type: 'contact',
+      status: 'new',
+      customer: {
+        name,
+        company: subject || 'General Customer',
+        email,
+        phone: '',
+      },
+      details: {
+        product: subject || 'Direct Website Contact',
+        notes: message
+      }
+    });
 
     return NextResponse.json({
       success: true,
