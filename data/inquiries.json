@@ -4,7 +4,7 @@
     "reference": "RFQ-2026-9281",
     "createdAt": "2026-11-06T08:30:00.000Z",
     "type": "rfq",
-    "status": "new",
+    "status": "quoted",
     "customer": {
       "name": "Sarah Jenkins",
       "company": "Nordic Living Essentials Ltd",
@@ -19,7 +19,14 @@
       "destination": "Gothenburg Port, Sweden",
       "notes": "We require unbleached cotton inner lining and custom kraft hangtags with our brand logo. Please provide container packing breakdown."
     },
-    "communications": []
+    "communications": [
+      {
+        "sender": "export@northbengalhandmade.com",
+        "subject": "Formal Quotation: Kaunia Rectangular Seagrass Storage Baskets (Set of 3) [NB-EXP-101] - North Bengal Handmade Products BD",
+        "body": "Dear Sarah Jenkins,\n\nThank you for your interest in North Bengal Handmade Products BD. We have received your export inquiry [Ref: RFQ-2026-9281] for:\n• Product: Kaunia Rectangular Seagrass Storage Baskets (Set of 3) [NB-EXP-101]\n• Target Quantity: 1,200 sets\n• Preferred Incoterm: FOB Chittagong Seaport (BDCGP)\n\nWe are pleased to provide you with our official factory proposal:\n1. Unit Price: $____ USD / pc (FOB Chittagong Seaport)\n2. Production Lead Time: 30-35 days from L/C confirmation\n3. Export Packaging: 5-ply export master carton with silica gel humidity control\n4. Certifications: Phytosanitary & Certificate of Origin included\n\nPlease let us know if you require counter-samples dispatched to your office.\n\nBest regards,\nCommercial Merchandising Desk\nNorth Bengal Handmade Products BD\nHouse No: 08, Road No: 08, Sector-06, Uttara, Dhaka-1230, Bangladesh",
+        "sentAt": "2026-11-06T06:42:21.356Z"
+      }
+    ]
   },
   {
     "id": "inq-02",

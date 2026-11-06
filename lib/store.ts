@@ -125,10 +125,19 @@ export function getProducts(): ProductItem[] {
   try {
     const raw = fs.readFileSync(catalogPath, 'utf-8');
     const list: ProductItem[] = JSON.parse(raw);
-    return list.map(item => ({
-      ...item,
-      images: item.images && item.images.length > 0 ? item.images : [item.image]
-    }));
+    return list.map(item => {
+      const mainImg = item.image || item.heroImage || (item.images && item.images[0]) || '/assets/products-gallery/nb-prod-01.jpg';
+      const imagesList = item.images && item.images.length > 0 ? item.images : [mainImg];
+      return {
+        ...item,
+        image: mainImg,
+        heroImage: mainImg,
+        thumb: item.thumb || mainImg,
+        images: imagesList,
+        badge: item.badge || 'Export Grade',
+        description: item.description || `${item.title} handcrafted in Northern Bengal using natural ${item.material || 'organic fibers'}.`
+      };
+    });
   } catch (err) {
     console.error('Error reading catalog:', err);
     return [];

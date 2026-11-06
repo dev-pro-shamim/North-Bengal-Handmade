@@ -9,12 +9,17 @@ export interface ProductItem {
   structure: string;
   image: string;
   thumb: string;
+  heroImage?: string;
   images?: string[];
+  badge?: string;
+  description?: string;
   moq: string;
   leadTime: string;
   compliance: string;
   origin: string;
   featured: boolean;
+  specs?: any;
+  customizationOptions?: any;
 }
 
 export const ALL_PRODUCTS: ProductItem[] = [

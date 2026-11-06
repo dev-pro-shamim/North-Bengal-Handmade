@@ -288,6 +288,55 @@ export const PRODUCTS: Product[] = [
   }
 ];
 
+import { ALL_PRODUCTS } from '@/lib/allProductsData';
+
 export function getProductBySlug(slug: string): Product | undefined {
-  return PRODUCTS.find(p => p.slug === slug);
+  const direct = PRODUCTS.find(p => p.slug === slug);
+  if (direct) return direct;
+
+  const galleryItem = ALL_PRODUCTS.find(p => p.slug === slug || p.id === slug);
+  if (!galleryItem) return undefined;
+
+  const mainImg = galleryItem.image || galleryItem.thumb || '/assets/products/kaisa-grass-deep-baskets.jpg';
+  const galleryImgs = galleryItem.images && galleryItem.images.length > 0 ? galleryItem.images : [mainImg];
+
+  return {
+    slug: galleryItem.slug,
+    category: galleryItem.category,
+    title: galleryItem.title,
+    subtitle: `${galleryItem.structure} • ${galleryItem.material}`,
+    badge: galleryItem.featured ? 'Featured Workshop Product' : 'Export Catalog Item',
+    heroImage: mainImg,
+    gallery: galleryImgs,
+    description: `${galleryItem.title} is meticulously handwoven by skilled rural artisans in Northern Bengal using sustainably sourced ${galleryItem.material}.`,
+    longDescription: `Handcrafted in Kaunia, Rangpur and managed via our Dhaka corporate desk, this ${galleryItem.title} features resilient ${galleryItem.structure} construction. Designed for international lifestyle retailers, department stores, and eco-conscious interior brands seeking zero-plastic, 100% biodegradable natural home organizers.`,
+    features: [
+      `100% authentic natural ${galleryItem.material} handloomed by rural women artisans`,
+      `Structure: ${galleryItem.structure} with artisan hand finishing`,
+      `Compliance: ${galleryItem.compliance || 'Phytosanitary & Fumigation Certified'}`,
+      `Export Incoterm: ${galleryItem.leadTime || 'FOB Chittagong Port (BDCGP)'}`,
+      'Zero synthetic plastic or harsh chemical glues — 100% eco-friendly and biodegradable'
+    ],
+    specs: {
+      material: galleryItem.material,
+      weightGsm: 'Approx. 0.85 - 1.5 kg per unit (depending on size)',
+      standardDimensions: [
+        'Small: 28 x 20 x 14 cm',
+        'Medium: 34 x 26 x 18 cm',
+        'Large: 40 x 32 x 22 cm'
+      ],
+      customDimensionsAvailable: true,
+      dyes: 'Natural Ecru / Non-Toxic Azo-Free Dyes',
+      moq: galleryItem.moq || '300 pcs',
+      productionLeadTime: galleryItem.leadTime || '25-35 Days FOB Chittagong',
+      samplingTime: '5-7 Days Express Air Courier',
+      exportPackaging: 'Moisture-proof poly lined 5-ply corrugated export cartons',
+      portOfDispatch: 'Chittagong Port (BDCGP) / Dhaka Airport (DAC)'
+    },
+    customizationOptions: {
+      sizes: ['Standard Medium', 'Standard Large', 'Set of 3 Nested', 'Bespoke Custom Size'],
+      colors: ['Natural Unbleached Fiber', 'Two-Tone Accent', 'Smoked / Tea Wash', 'Custom Pantones'],
+      branding: ['Debossed Faux Leather Tag', 'Woven Fabric Brand Label', 'Custom Barcode Kraft Hangtag']
+    }
+  };
 }

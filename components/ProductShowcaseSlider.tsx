@@ -103,9 +103,15 @@ export default function ProductShowcaseSlider() {
                   className="aspect-square w-full bg-stone-950 p-4 relative overflow-hidden flex items-center justify-center cursor-pointer group/img"
                 >
                   <img
-                    src={item.image}
+                    src={item.image || item.heroImage || (item.images && item.images[0]) || item.thumb || '/assets/products/kaisa-grass-deep-baskets.jpg'}
                     alt={item.title}
                     loading="lazy"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      if (!target.src.includes('kaisa-grass-deep-baskets')) {
+                        target.src = '/assets/products/kaisa-grass-deep-baskets.jpg';
+                      }
+                    }}
                     className="w-full h-full object-contain transition-transform duration-500 group-hover/img:scale-110 drop-shadow-lg"
                   />
 

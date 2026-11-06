@@ -170,14 +170,20 @@ export default function GalleryPage() {
                       <div 
                         onClick={() => {
                           setActiveModalProduct(product);
-                          setModalActiveImage(product.images?.[0] || product.image);
+                          setModalActiveImage(product.images?.[0] || product.image || product.heroImage || '');
                         }}
                         className="relative aspect-square w-full bg-stone-100 overflow-hidden cursor-pointer flex items-center justify-center p-3 border-b border-stone-100 group/img"
                       >
                         <img
-                          src={product.image}
+                          src={product.image || product.heroImage || (product.images && product.images[0]) || product.thumb || '/assets/products/kaisa-grass-deep-baskets.jpg'}
                           alt={product.title}
                           loading="lazy"
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (!target.src.includes('nb-prod-01')) {
+                              target.src = '/assets/products/kaisa-grass-deep-baskets.jpg';
+                            }
+                          }}
                           className="w-full h-full object-contain transition-transform duration-500 group-hover/img:scale-108 group-hover:drop-shadow-md"
                         />
                         

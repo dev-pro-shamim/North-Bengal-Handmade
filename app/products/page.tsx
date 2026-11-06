@@ -9,7 +9,7 @@ import { PRODUCTS } from '@/lib/products';
 export default function ProductsCatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [liveProducts, setLiveProducts] = useState(PRODUCTS);
+  const [liveProducts, setLiveProducts] = useState<any[]>(PRODUCTS);
   const [dbCategories, setDbCategories] = useState<{ id: string; name: string; slug?: string }[]>([]);
 
   useEffect(() => {
@@ -171,12 +171,18 @@ export default function ProductsCatalogPage() {
                       {/* Product Image */}
                       <div className="relative h-64 overflow-hidden bg-stone-100 flex items-center justify-center">
                         <img 
-                          src={p.heroImage} 
+                          src={p.heroImage || p.image || (p.images && p.images[0]) || p.thumb || '/assets/products/kaisa-grass-deep-baskets.jpg'} 
                           alt={p.title} 
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (!target.src.includes('kaisa-grass-deep-baskets')) {
+                              target.src = '/assets/products/kaisa-grass-deep-baskets.jpg';
+                            }
+                          }}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
                         <span className="absolute top-3 left-3 bg-amber-400 text-stone-950 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
-                          {p.badge}
+                          {p.badge || 'Export Grade'}
                         </span>
                       </div>
 

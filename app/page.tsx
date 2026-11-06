@@ -13,7 +13,7 @@ export default function HomePage() {
   const [catalogFilter, setCatalogFilter] = useState<string>('all');
   const [selectedCert, setSelectedCert] = useState<{ img: string; title: string; issuer: string } | null>(null);
   const [siteContent, setSiteContent] = useState<any>(null);
-  const [liveProducts, setLiveProducts] = useState(PRODUCTS);
+  const [liveProducts, setLiveProducts] = useState<any[]>(PRODUCTS);
   const [categories, setCategories] = useState<{ id: string; name: string; slug?: string }[]>([]);
 
   useEffect(() => {
@@ -516,18 +516,28 @@ export default function HomePage() {
             {filteredProducts.map(p => (
               <div key={p.slug} className="bg-white rounded-3xl overflow-hidden shadow-soft-card border border-stone-200 hover:shadow-2xl transition duration-300 flex flex-col justify-between group">
                 <div>
-                  <div className="relative h-64 overflow-hidden bg-stone-100">
-                    <img src={p.heroImage} alt={p.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"/>
+                  <div className="relative h-64 overflow-hidden bg-stone-100 flex items-center justify-center">
+                    <img 
+                      src={p.heroImage || p.image || (p.images && p.images[0]) || p.thumb || '/assets/products/kaisa-grass-deep-baskets.jpg'} 
+                      alt={p.title} 
+                      onError={(e) => {
+                        const target = e.currentTarget;
+                        if (!target.src.includes('kaisa-grass-deep-baskets')) {
+                          target.src = '/assets/products/kaisa-grass-deep-baskets.jpg';
+                        }
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                     <span className="absolute top-3 left-3 bg-amber-400 text-stone-950 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow">
-                      {p.badge}
+                      {p.badge || 'Export Grade'}
                     </span>
                   </div>
                   <div className="p-6">
                     <div className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-1">{p.category}</div>
                     <h3 className="font-bold text-lg text-stone-900 group-hover:text-amber-700 transition">{p.title}</h3>
-                    <p className="text-xs text-stone-600 mt-2 line-clamp-2">{p.description}</p>
+                    <p className="text-xs text-stone-600 mt-2 line-clamp-2">{p.description || `${p.title} handcrafted in Northern Bengal using premium natural fibers.`}</p>
                     <div className="mt-4 pt-3 border-t border-stone-100 text-[11px] text-stone-500 font-mono">
-                      <span>MOQ: <strong className="text-stone-900">{p.specs?.moq ? p.specs.moq.split(' ')[0] : '500'} pcs</strong></span> • <span>Lead Time: <strong className="text-stone-900">{p.specs?.productionLeadTime ? p.specs.productionLeadTime.split('for')[0] : '25-35 Days'}</strong></span>
+                      <span>MOQ: <strong className="text-stone-900">{p.specs?.moq ? p.specs.moq.split(' ')[0] : (p.moq ? p.moq.split(' ')[0] : '500')} pcs</strong></span> • <span>Lead Time: <strong className="text-stone-900">{p.specs?.productionLeadTime ? p.specs.productionLeadTime.split('for')[0] : (p.leadTime ? p.leadTime.split('for')[0] : '25-35 Days')}</strong></span>
                     </div>
                   </div>
                 </div>
