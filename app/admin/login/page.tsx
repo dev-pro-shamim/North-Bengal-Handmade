@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function AdminLoginPage() {
-  const [username, setUsername] = useState('admin');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -114,16 +114,11 @@ export default function AdminLoginPage() {
           </div>
         </form>
 
-        {/* Security Credentials Notice */}
+        {/* Return to Public Website */}
         <div className="mt-8 pt-6 border-t border-stone-800/80 text-center">
-          <div className="text-[11px] text-stone-400">
-            Default credentials: <strong className="text-amber-400 font-mono">admin</strong> / <strong className="text-amber-400 font-mono">AdminNB#2026!</strong>
-          </div>
-          <div className="mt-4">
-            <Link href="/" className="text-stone-500 hover:text-stone-300 text-xs transition">
-              ← Return to Public Website
-            </Link>
-          </div>
+          <Link href="/" className="text-stone-400 hover:text-amber-400 text-xs font-semibold transition">
+            ← Return to Public Website
+          </Link>
         </div>
 
       </div>

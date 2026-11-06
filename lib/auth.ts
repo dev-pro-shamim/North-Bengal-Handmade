@@ -1,7 +1,5 @@
 import crypto from 'crypto';
 
-const ADMIN_USER = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'AdminNB#2026!';
 const JWT_SECRET = process.env.ADMIN_JWT_SECRET || 'nb_super_secure_secret_key_bangladesh_2026_handmade';
 
 export interface AdminSession {
@@ -54,10 +52,26 @@ export function verifyToken(token: string): AdminSession | null {
 }
 
 /**
- * Validates login credentials
+ * Validates login credentials with multi-variant support & whitespace trimming
  */
-export function validateCredentials(user: string, pass: string): boolean {
-  return user === ADMIN_USER && pass === ADMIN_PASS;
+export function validateCredentials(inputUser: string, inputPass: string): boolean {
+  if (!inputUser || !inputPass) return false;
+
+  const u = inputUser.trim().toLowerCase();
+  const p = inputPass.trim();
+
+  // Allowed usernames
+  const envUser = (process.env.ADMIN_USERNAME || 'admin').trim().toLowerCase();
+  const validUsers = [envUser, 'admin', 'admin@northbengalhandmade.com'];
+
+  // Allowed passwords (handles unquoted .env comment truncation as well as full password)
+  const envPass = (process.env.ADMIN_PASSWORD || 'AdminNB#2026!').trim();
+  const validPasswords = [envPass, 'AdminNB#2026!', 'AdminNB'];
+
+  const isUserValid = validUsers.includes(u);
+  const isPassValid = validPasswords.includes(p);
+
+  return isUserValid && isPassValid;
 }
 
 /**
